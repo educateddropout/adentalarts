@@ -103,6 +103,42 @@ class QueryBuilder
 
 	}
 
+	public function updateDentalInfo($jobOrderId, $lastModified, $lastModifiedBy){
+
+		
+		$currentDate = date("Y-m-d H:i:s");
+		$archive = 0; // active
+
+		$statement = $this->pdo->prepare("INSERT tbl_dental_info (job_order_id,
+																		t18, t17, t16, t15, t14, t13, t12, t11,
+																		t21, t22, t23, t24, t25, t26, t27, t28,
+																		t48, t47, t46, t45, t44, t43, t42, t41,
+																		t31, t32, t33, t34, t35, t36, t37, t38,
+																		last_modified_by, last_modified, archive)
+											VALUES (?,
+													?,?,?,?,?,?,?,?,
+													?,?,?,?,?,?,?,?,
+													?,?,?,?,?,?,?,?,
+													?,?,?,?,?,?,?,?,
+													?,?,?)" );
+
+		$statement->execute([$jobOrderId,
+
+							"00000-0", "00000-0", "00000-0", "00000-0", "00000-0", "00000-0", "00000-0", "00000-0",
+
+							"00000-0", "00000-0", "00000-0", "00000-0", "00000-0", "00000-0", "00000-0", "00000-0",
+
+							"00000-0", "00000-0", "00000-0", "00000-0", "00000-0", "00000-0", "00000-0", "00000-0",
+
+							"00000-0", "00000-0", "00000-0", "00000-0", "00000-0", "00000-0", "00000-0", "00000-0",
+
+							$lastModifiedBy, $lastModified, $archive]);
+
+		return $statement->rowCount();
+
+
+	}
+
 	public function archiveClientDetails($userId, $clientId){
 
 		
@@ -300,7 +336,7 @@ class QueryBuilder
 	public function saveJobOrder($form, $userId){
 
 		$clientId = $form["client"]["value"];
-		$technicianId = $form["client"]["value"];
+		$technicianId = $form["technician"]["value"];
 		$patientName = $form["patientName"]["value"];
 		$particulars = $form["particulars"];
 		$totalPrice = $form["totalPrice"];
@@ -341,6 +377,31 @@ class QueryBuilder
 											VALUES (?,?,?,?,?,?,?)");
 						
 			$statement->execute([$jobOrderId, $transactionType, strtoupper($remarks), $currentDate, $currentDate, $userId,$archive]);
+
+			$statement = $this->pdo->prepare("INSERT tbl_dental_info (job_order_id,
+																		t18, t17, t16, t15, t14, t13, t12, t11,
+																		t21, t22, t23, t24, t25, t26, t27, t28,
+																		t48, t47, t46, t45, t44, t43, t42, t41,
+																		t31, t32, t33, t34, t35, t36, t37, t38,
+																		last_modified_by, last_modified, archive)
+											VALUES (?,
+													?,?,?,?,?,?,?,?,
+													?,?,?,?,?,?,?,?,
+													?,?,?,?,?,?,?,?,
+													?,?,?,?,?,?,?,?,
+													?,?,?)" );
+
+			$statement->execute([$jobOrderId,
+
+							"00000-0", "00000-0", "00000-0", "00000-0", "00000-0", "00000-0", "00000-0", "00000-0",
+
+							"00000-0", "00000-0", "00000-0", "00000-0", "00000-0", "00000-0", "00000-0", "00000-0",
+
+							"00000-0", "00000-0", "00000-0", "00000-0", "00000-0", "00000-0", "00000-0", "00000-0",
+
+							"00000-0", "00000-0", "00000-0", "00000-0", "00000-0", "00000-0", "00000-0", "00000-0",
+
+							$userId, $currentDate, $archive]);
 			        
 		    
 			foreach ($particulars as $p) {
@@ -368,6 +429,21 @@ class QueryBuilder
 
 	}
 
+	public function fetchJO(){
+
+		$archive = 0; // active
+
+		$statement = $this->pdo->prepare("SELECT job_order_id, last_modified, last_modified_by
+												
+											FROM tbl_job_order
+											WHERE archive = ?");
+
+		$transaction = $statement->execute([$archive]);
+		
+		return $statement->fetchAll(PDO::FETCH_ASSOC);
+
+	}
+
 	public function fetchJobOrders($dateFrom, $dateTo){
 
 		$archive = 0; // active
@@ -384,6 +460,55 @@ class QueryBuilder
 
 		$transaction = $statement->execute([$archive, $dateFrom, $dateTo]);
 		
+		return $statement->fetchAll(PDO::FETCH_ASSOC);
+
+	}
+
+	public function updateDentalRecord($data, $userId){
+
+		$archive = 0; // active
+		$currentDate = date("Y-m-d H:i:s");
+
+		$statement = $this->pdo->prepare("UPDATE tbl_dental_info 
+											SET t18 = ?, t17 = ?, t16 = ?, t15 = ?, t14 = ?, t13 = ?, t12 = ?, t11 = ?, 
+												t21 = ?, t22 = ?, t23 = ?, t24 = ?, t25 = ?, t26 = ?, t27 = ?, t28 = ?, 
+												t48 = ?, t47 = ?, t46 = ?, t45 = ?, t44 = ?, t43 = ?, t42 = ?, t41 = ?, 
+												t31 = ?, t32 = ?, t33 = ?, t34 = ?, t35 = ?, t36 = ?, t37 = ?, t38 = ?,
+												last_modified_by = ?, last_modified = ?
+											WHERE job_order_id = ?" );
+
+		$statement->execute([
+
+							$data['upper_right_teeth'][0], $data['upper_right_teeth'][1], $data['upper_right_teeth'][2], $data['upper_right_teeth'][3], $data['upper_right_teeth'][4], $data['upper_right_teeth'][5], $data['upper_right_teeth'][6], $data['upper_right_teeth'][7],
+
+							$data['upper_left_teeth'][0], $data['upper_left_teeth'][1], $data['upper_left_teeth'][2], $data['upper_left_teeth'][3], $data['upper_left_teeth'][4], $data['upper_left_teeth'][5], $data['upper_left_teeth'][6], $data['upper_left_teeth'][7],
+
+							$data['lower_right_teeth'][0], $data['lower_right_teeth'][1], $data['lower_right_teeth'][2], $data['lower_right_teeth'][3], $data['lower_right_teeth'][4], $data['lower_right_teeth'][5], $data['lower_right_teeth'][6], $data['lower_right_teeth'][7],
+
+							$data['lower_left_teeth'][0], $data['lower_left_teeth'][1], $data['lower_left_teeth'][2], $data['lower_left_teeth'][3], $data['lower_left_teeth'][4], $data['lower_left_teeth'][5], $data['lower_left_teeth'][6], $data['lower_left_teeth'][7],
+
+							$userId, $currentDate,
+
+							$data['id']]);
+
+		return $statement->rowCount();
+
+	}
+
+	public function fetchDentalRecord($jobOrderId){
+
+
+		$statement = $this->pdo->prepare("SELECT id,
+													t18, t17, t16, t15, t14, t13, t12, t11,
+													t48, t47, t46, t45, t44, t43, t42, t41,
+													t38, t37, t36, t35, t34, t33, t32, t31,
+													t28, t27, t26, t25, t24, t23, t22, t21,
+													last_modified, last_modified_by
+												FROM tbl_dental_info
+												WHERE job_order_id = ?");
+
+		$statement->execute([$jobOrderId]);
+
 		return $statement->fetchAll(PDO::FETCH_ASSOC);
 
 	}

@@ -66,6 +66,8 @@ var ps = new Vue({
 
 		statusTypes : { 'value' : ['C','O'] },
         technicianTypes : { 'value' : [] },
+
+        teethObject : teethObject()
 	},
 
 	created(){
@@ -78,6 +80,7 @@ var ps = new Vue({
 	},
 
 	computed : {
+
 		showParticulars(){
 			let retVal = true;
 
@@ -245,6 +248,7 @@ var ps = new Vue({
 			let self = this;
 
 			this.fetchJobOrderHistory(id);
+			this.fetchDentalRecord(id);
 			this.fetchParticularsPerJobOrder(id);
 		},
 
@@ -300,6 +304,32 @@ var ps = new Vue({
 
 		},
 
+		fetchDentalRecord(id){
+
+			let self = this;
+
+			axios.post('../php/api/fetchDentalRecord.php',{
+            
+                jobOrderId : id
+
+            })
+            .then(function (response){
+
+                console.log(response.data);
+
+                if(response.data.status == "SUCCESS"){
+
+                    self.teethObject = populateTeethData(response.data.message[0]);
+
+                }
+
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+		},
+
 		
 		showForm(ctr){
 
@@ -317,6 +347,8 @@ var ps = new Vue({
 				currentPrice : { value : 0, error : ""},
 				quantity : {value : 0, error : ""}
 			}
+
+			this.teethObject = teethObject();
 
 
 			if(ctr == 1) this.forUpdating = true;

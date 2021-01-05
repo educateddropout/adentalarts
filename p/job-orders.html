@@ -12,7 +12,8 @@
     <link rel="stylesheet" type="text/css" href="../css/lib/w3css/v4/w3.css">
     <link rel="stylesheet" type="text/css" href="../css/admin.css">
     <link rel="stylesheet" type="text/css" href="../css/lib/bulma-modal-fx-1.1.0/dist/css/modal-fx.min.css"> 
-    <link rel="stylesheet" type="text/css" href="../css/lib/bulma-divider/dist/css/bulma-divider.min.css"> 
+    <link rel="stylesheet" type="text/css" href="../css/lib/bulma-divider/dist/css/bulma-divider.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/lib/circle.css">
 
 </head>
 <body>
@@ -102,9 +103,8 @@
                 </header>
                 <section class="modal-card-body">
                 <!-- Modal card body -->
-                    <div class="w3-row">
-                        <div class="w3-col l1">&nbsp</div>
-                        <div class="w3-col l10" >
+                    <div class="w3-row w3-container">
+                        <div class="w3-col l12" >
                             <div class="w3-row-padding">
 
                                 <div class="w3-quarter">
@@ -169,7 +169,7 @@
                             <div class="w3-row" v-if="showParticulars">
 
                                 <div v-if="!forUpdating">
-                                    <div class="is-divider" data-content=""></div>
+                                    <hr>
 
                                     <div class="w3-row-padding">
 
@@ -265,9 +265,18 @@
                                 </div>
 
                                 <div v-if="forUpdating">
+                                    <div class="is-divider" data-content="Dental Info"></div>
+
+                                    <dental-info
+                                        :teeth-object = "teethObject"
+                                        :job-order-id = "selectedJobOrder"
+                                        :job-order-status = "selectedJobOrderStatus"
+                                    >
+                                    </dental-info>
+
                                     <div class="is-divider" data-content="Job Order History"></div>
                                     <button class="button is-success" @click="openChangeStatusModal" :disabled="selectedJobOrderStatus == 'C'"><i class="fas fa-archive"></i> &nbsp Tag as Done</button>
-                                    <button class="button w3-right is-outlined is-link" @click="openAddHistory" :disabled="selectedJobOrderStatus == 'C'" > 
+                                    <button class="button w3-right is-link" @click="openAddHistory" :disabled="selectedJobOrderStatus == 'C'" > 
                                         <i class="fas fa-plus"></i> &nbsp Add Job Order History 
                                     </button>
                                     <br>
@@ -417,6 +426,8 @@
     <script src="../js/components/dateSelection.js"></script>
     <script src="../js/components/jobOrders/jobOrderTable.js"></script>
     <script src="../js/components/jobOrders/filterJobOrder.js"></script>
+    <script src="../js/components/jobOrders/dentalInfo.js"></script>
+    <script src="../js/components/jobOrders/dentalRecord.js"></script>
     <script src="../js/scripts/commonLib.js"></script>
     <script src="../js/instances/jobOrders.js"></script>
 
