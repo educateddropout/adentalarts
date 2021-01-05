@@ -117,12 +117,12 @@
 		$pdf->SetY($yAxis);
 		$pdf->SetX($xAxis);
 		$pdf->SetFont('Times','B',12);
-		$pdf->Cell(180,3,"AMPONG DENTAL CLINIC",0, 2, 'C');
+		$pdf->Cell(180,3,"DENTAL ARTS DIGITAL LABORATORY",0, 2, 'C');
 		$pdf->SetFont('Times','',8);
-		$pdf->Cell(180,3,"2F Kamuning Place, Kamuning Road,",0, 2, 'C');
-		$pdf->Cell(180,3,"Quezon City, Philippines",0, 2, 'C');
-		$pdf->Cell(180,3,"Phone: (02) 8281-5482",0, 2, 'C');
-		$pdf->Cell(180,3,"Cellphone: (63) 9178835013",0, 2, 'C');
+		$pdf->Cell(180,3,"Unit 643, Winland Tower Residences 4",0, 2, 'C');
+		$pdf->Cell(180,3,"#45 Tomas Morato Avenue, Quezon City",0, 2, 'C');
+		$pdf->Cell(180,3,"Phone: (02) 8521-3683",0, 2, 'C');
+		$pdf->Cell(180,3,"Cellphone: (63) 917-138-5116",0, 2, 'C');
 
 		$yAxis = 35;
 		$pdf->SetY($yAxis);
@@ -144,25 +144,22 @@
 		$pdf->SetX($xAxis);
 
 		$pdf->SetFont('Times','B',10);
-		$pdf->CellFitScale(20,6,"QUANTITY",0, 0, 'C');
-		$pdf->CellFitScale(15,6,"UNIT",0, 0, 'C');
-		$pdf->CellFitScale(100,6,"",0, 0, 'C');
+		$pdf->CellFitScale(20,6,"UNIT",0, 0, 'C');
+		$pdf->CellFitScale(115,6,"",0, 0, 'C');
 		$pdf->CellFitScale(20,6,"UNIT",0, 0, 'C');
 		$pdf->CellFitScale(25,6,"AMOUNT",0, 0, 'C');
 		$yAxis = $yAxis+6;
 		$pdf->SetY($yAxis);
 		$pdf->SetX($xAxis);
 		$pdf->CellFitScale(20,6,"",0, 0, 'C');
-		$pdf->CellFitScale(15,6,"",0, 0, 'C');
-		$pdf->CellFitScale(100,6,"",0, 0, 'C');
+		$pdf->CellFitScale(115,6,"",0, 0, 'C');
 		$pdf->CellFitScale(20,6,"PRICE",0, 0, 'C');
 		$pdf->CellFitScale(25,6,"",0, 0, 'C');
 
 		$pdf->SetY($yAxis-6);
 		$pdf->SetX($xAxis);
 		$pdf->CellFitScale(20,12,"",1, 0, 'C');
-		$pdf->CellFitScale(15,12,"",1, 0, 'C');
-		$pdf->CellFitScale(100,12,"",1, 0, 'C');
+		$pdf->CellFitScale(115,12,"",1, 0, 'C');
 		$pdf->CellFitScale(20,12,"",1, 0, 'C');
 		$pdf->CellFitScale(25,12,"",1, 0, 'C');
 
@@ -177,8 +174,7 @@
 			$pdf->SetX($xAxis);
 
 			$pdf->Cell(20,6,"",1, 0, 'L');
-			$pdf->Cell(15,6,"",1, 0, 'L');
-			$pdf->Cell(100,6,"",1, 0, 'L');
+			$pdf->Cell(115,6,"",1, 0, 'L');
 			$pdf->Cell(20,6,"",1, 0, 'L');
 			$pdf->Cell(25,6,"",1, 0, 'L');
 
@@ -194,8 +190,7 @@
 			$pdf->SetY($y);
 			$pdf->SetX($xAxis);
 			$pdf->CellFitScale(20,6,$p["quantity"],1, 0, 'C');
-			$pdf->CellFitScale(15,6,"",1, 0, 'L');
-			$pdf->CellFitScale(100,6,$p["description"],1, 0, 'L');
+			$pdf->CellFitScale(115,6,$p["description"],1, 0, 'L');
 			$pdf->CellFitScale(20,6,"P" .number_format($p["price"],2,'.',','),1, 0, 'L');
 			$pdf->CellFitScale(25,6,"P" .number_format($p["quantity"]*$p["price"],2,'.',','),1, 0, 'L');
 			$totalAmount += ($p["quantity"]*$p["price"]);
@@ -204,8 +199,7 @@
 		$pdf->SetY($y);
 		$pdf->SetX($xAxis);
 		$pdf->CellFitScale(20,6,"",1, 0, 'C');
-		$pdf->CellFitScale(15,6,"",1, 0, 'L');
-		$pdf->CellFitScale(100,6,"",1, 0, 'L');
+		$pdf->CellFitScale(115,6,"",1, 0, 'L');
 		$pdf->SetFont('Times','B',11);
 		$pdf->CellFitScale(20,6,"TOTAL",1, 0, 'L');
 		$pdf->SetFont('Times','',11);
@@ -215,8 +209,7 @@
 		$pdf->SetY($y);
 		$pdf->SetX($xAxis);
 		$pdf->CellFitScale(20,6,"",1, 0, 'C');
-		$pdf->CellFitScale(15,6,"",1, 0, 'L');
-		$pdf->CellFitScale(100,6,"Patient Name: ".$data['patient_name'],1, 0, 'L');
+		$pdf->CellFitScale(115,6,"Patient Name: ".$data['patient_name'],1, 0, 'L');
 		$pdf->CellFitScale(20,6,"",1, 0, 'L');
 		$pdf->CellFitScale(25,6,"",1, 0, 'L');
 
@@ -224,7 +217,10 @@
 		$pdf->SetY($y);
 		$pdf->SetX($xAxis);
 		$pdf->SetFont('Times','B',10);
-		$pdf->Cell(90,4,"Approved By:",0, 0, 'L');
+		$pdf->Cell(25,4,"Approved By:",0, 0, 'L');
+		$pdf->SetFont('Times','',10);
+		$pdf->Cell(65,4,$_SESSION['ada_name'],0, 0, 'L');
+		$pdf->SetFont('Times','B',10);
 		$pdf->Cell(60,4,"Received in good order and condition:",0, 0, 'L');
 
 		$pdf->SetFont('Times','',9);

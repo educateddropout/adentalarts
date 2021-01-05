@@ -115,12 +115,12 @@
 		$pdf->SetY($yAxis);
 		$pdf->SetX($xAxis);
 		$pdf->SetFont('Times','B',12);
-		$pdf->Cell($coveredWidth,3,"AMPONG DENTAL CLINIC",0, 2, 'C');
+		$pdf->Cell($coveredWidth,3,"DENTAL ARTS DIGITAL LABORATORY",0, 2, 'C');
 		$pdf->SetFont('Times','',8);
-		$pdf->Cell($coveredWidth,3,"2F Kamuning Place, Kamuning Road,",0, 2, 'C');
-		$pdf->Cell($coveredWidth,3,"Quezon City, Philippines",0, 2, 'C');
-		$pdf->Cell($coveredWidth,3,"Phone: (02) 8281-5482",0, 2, 'C');
-		$pdf->Cell($coveredWidth,3,"Cellphone: (63) 9178835013",0, 2, 'C');
+		$pdf->Cell($coveredWidth,3,"Unit 643, Winland Tower Residences 4",0, 2, 'C');
+		$pdf->Cell($coveredWidth,3,"#45 Tomas Morato Avenue, Quezon City",0, 2, 'C');
+		$pdf->Cell($coveredWidth,3,"Phone: (02) 8521-3683",0, 2, 'C');
+		$pdf->Cell($coveredWidth,3,"Cellphone: (63) 917-138-5116",0, 2, 'C');
 
 		$yAxis = 35;
 		$pdf->SetY($yAxis);
