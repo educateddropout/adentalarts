@@ -147,8 +147,8 @@
 		$col5 = 20;
 		$col6 = 40;
 		$col7 = 20;
-		$col8 = 40;
-		$col9 = 10;
+		$col8 = 35;
+		$col9 = 15;
 		$col10 = 15;
 
 		$pdf->SetY($yAxis);
@@ -192,7 +192,7 @@
 		$pdf->CellFitScale($col6,7," ",0, 0, 'C');
 		$pdf->CellFitScale($col7,7," ",0, 0, 'C');
 		$pdf->CellFitScale($col8,7," ",0, 0, 'C');
-		$pdf->CellFitScale($col9,5,"%",0, 0, 'C');
+		$pdf->CellFitScale($col9,5,"Commision",0, 0, 'C');
 		$pdf->CellFitScale($col10,7,"",0, 0, 'C');
 
 
@@ -217,9 +217,9 @@
 			$pdf->CellFitScale($col4,7,$data[$i]['address'],1, 0, 'C');
 			$pdf->CellFitScale($col5,7,$data[$i]['contact_number'],1, 0, 'C');
 			$pdf->CellFitScale($col6,7,$data[$i]['patient_name'],1, 0, 'C');
-			$pdf->CellFitScale($col7,7,"P".number_format($data[$i]['total_price']),1, 0, 'C');
+			$pdf->CellFitScale($col7,7,"P ".number_format($data[$i]['total_price']),1, 0, 'C');
 			$pdf->CellFitScale($col8,7,$data[$i]['technician_name'],1, 0, 'C');
-			$pdf->CellFitScale($col9,7,$data[$i]['technician_percentage']."%",1, 0, 'C');
+			$pdf->CellFitScale($col9,7,"P ".number_format($data[$i]['technician_percentage']),1, 0, 'C');
 			$pdf->CellFitScale($col10,7,$data[$i]['status'],1, 0, 'C');
 			$total += $data[$i]['total_price'];
 			

@@ -38,10 +38,10 @@ function validatePercentage(input){
 
     let retVal = "";
     
-    if(input.trim() != ""){
+    if(input !== ""){
 
-        if(input > 100 || input < 0){
-            retVal = "Percentage should be 0 to 100 only";
+        if(input > 100000 || input < 0){
+            retVal = "Percentage should be 0 to 100000 only";
         }
 
         if (! /^[0-9]+$/.test(input)) {

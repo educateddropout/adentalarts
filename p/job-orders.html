@@ -150,15 +150,15 @@
                                 </div>
                                 <div class="w3-quarter">
                                     <div class="field">
-                                        <div class="control has-icons-right">
+                                        <div class="control has-icons-left">
                                             <input class="input upperCase" type="number" v-model="form.tPercentage.value" :class="{'is-danger' : form.tPercentage.error != ''}" maxlength="3"
                                                 @change="changeTPercentage" :disabled="forUpdating"
                                             >
-                                            <span class="icon is-right">
-                                                %
+                                            <span class="icon is-left">
+                                                ₱
                                             </span>
 
-                                            <p class="help"><b>Technician Percentage</b></p>  
+                                            <p class="help"><b>Technician Commision</b></p>  
                                             <p class="help is-danger"><b>{{form.tPercentage.error}}</b></p>  
                                         </div>
                                     </div>

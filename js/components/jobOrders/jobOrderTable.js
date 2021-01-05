@@ -30,7 +30,7 @@ Vue.component('jobOrderTable', {
                             <th class=" has-text-white ">Patient Name</th>
                             <th class=" has-text-white ">Total Price</th>
                             <th class=" has-text-white ">Technician Name</th>
-                            <th class=" has-text-white w3-center">Technician %</th>
+                            <th class=" has-text-white w3-center">Technician Commision</th>
                             <th class=" has-text-white ">Status</th>
                             <th class=" has-text-white w3-border-left w3-center"></th>
                             <th class=" has-text-white w3-border-left w3-center"></th>
@@ -60,7 +60,7 @@ Vue.component('jobOrderTable', {
 
                             <td @click="viewJobOrder(index, c.job_order_id)" class="pointer">₱ {{convertMoney(c.total_price)}}</td>
                             <td @click="viewJobOrder(index, c.job_order_id)" class="pointer">{{c.technician_name}}</td>
-                            <td @click="viewJobOrder(index, c.job_order_id)" class="w3-center pointer">{{c.technician_percentage}}%</td>
+                            <td @click="viewJobOrder(index, c.job_order_id)" class="w3-center pointer">₱ {{convertMoney(c.technician_percentage)}}</td>
                             <td @click="viewJobOrder(index, c.job_order_id)">
                                 <span class="has-text-success" v-if="c.status == 'O'">OPEN</span>
                                 <span class="has-text-danger" v-else>CLOSED</span>
