@@ -1,6 +1,6 @@
 <?php
 
-$database = require '..\bootstrap.php';
+$database = require '..\bootstrapLogin.php';
 session_start();
 
 // setting return value
@@ -21,11 +21,11 @@ $results = $database->authenticateUser($username,$password);
 
 if($results){ //if returns true
 
-	$_SESSION['adi_username'] = $username;
-	$_SESSION['adi_user_id'] = $results[0]['user_id'];
-	$_SESSION['adi_user_type'] = $results[0]['user_type'];
-	$_SESSION['adi_nickname'] = $results[0]['nickname'];
-	$_SESSION['adi_name'] = $results[0]['name'];;
+	$_SESSION['ada_username'] = $username;
+	$_SESSION['ada_user_id'] = $results[0]['user_id'];
+	$_SESSION['ada_user_type'] = $results[0]['user_type'];
+	$_SESSION['ada_nickname'] = $results[0]['nickname'];
+	$_SESSION['ada_name'] = $results[0]['name'];
 	
 	$returnJson['success'] = true;
 

@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Dashboard</title>
+    <title>Ampong Dental Arts - Dashboard</title>
     <link rel="stylesheet" href="../css/lib/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="../css/lib/bulma/css/bulma.min.css">
     <link rel="stylesheet" type="text/css" href="../css/lib/w3css/v4/w3.css">
@@ -53,7 +53,7 @@
 
                 <div class="column main">
                     <br>
-                    <div class="w3-container">
+                    <div class="w3-container w3-row-padding">
 
                         <section class="hero is-info welcome is-small">
                             <div class="hero-body">
@@ -96,12 +96,12 @@
                             </div>
                         </section> -->
                         <br>
-                        <div class="columns">
-                            <div class="column is-6">
+                        <div class="w3-row-padding">
+                            <div class="w3-half">
                                 <div class="card events-card">
                                     <header class="card-header">
                                         <p class="card-header-title">
-                                            List of Products with low stocks
+                                            Ongoing Job Orders
                                         </p>
 
                                     </header>
@@ -111,33 +111,33 @@
                                             <table class="table is-fullwidth is-striped">
                                                 <thead>
                                                     <tr>
-                                                        <th>Name</td>
-                                                        <th>Product Type</td>
-                                                        <th>Units</td>
-                                                        <th>Quantity</td>
+                                                        <th>J.O. Number</td>
+                                                        <th>Client Name</td>
+                                                        <th>Patient Name</td>
+                                                        <th>Price</td>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr v-for="p in lowStockProducts">
-                                                        <td>{{p.name}}</td>
-                                                        <td>{{p.description}}</td>
-                                                        <td>{{p.unit}}</td>
-                                                        <td>{{p.quantity}}</td>
+                                                    <tr v-for="p in jobOrders">
+                                                        <td>{{p.job_order_id}}</td>
+                                                        <td>{{p.client_name}}</td>
+                                                        <td>{{p.patient_name}}</td>
+                                                        <td>₱ {{convertMoney(p.total_price)}}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
                                     <footer class="card-footer">
-                                        <a href="inventory.html" class="card-footer-item">View Products</a>
+                                        <a href="job-orders.html" class="card-footer-item">View Job Orders</a>
                                     </footer>
                                 </div>
                             </div>
-                            <div class="column is-6">
+                            <div class="w3-half">
                                 <div class="card events-card">
                                     <header class="card-header">
                                         <p class="card-header-title">
-                                            Last 10 Transactions
+                                            Top 10 sales
                                         </p>
 
                                     </header>
@@ -147,26 +147,21 @@
                                             <table class="table is-fullwidth is-striped">
                                                 <thead>
                                                     <tr>
-                                                        <th>Date of Transaction</td>
-                                                        <th>Type of Transaction</td>
-                                                        <th>Staff</td>
-                                                        <th>Cost of Transaction</td>
+                                                        <th>Description</td>
+                                                        <th>Sales Count</td>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr v-for="t in transactions">
-                                                        <td>{{t.last_modified}}</td>
-                                                        <td>{{t.type_of_transaction}}</td>
-                                                        <td>{{t.name}}</td>
-                                                        <td>₱ {{convertMoney(Number(t.total_amount))}}</td>
+                                                    <tr v-for="t in products">
+                                                        <td>{{t.particular_description}}</td>
+                                                        <td>{{t.total_sales}}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
                                     <footer class="card-footer">
-                                        <a href="transaction-incoming.html" class="card-footer-item">View Incoming Transactions</a>
-                                        <a href="transaction-outgoing.html" class="card-footer-item">View Outgoing Transactions</a>
+                                        <a href="job-orders.html" class="card-footer-item">View Job Orders</a>
                                     </footer>
                                 </div>
                             </div>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ampong Dental Arts - Manage Particulars</title>
+
+    <link rel="stylesheet" href="../css/lib/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/lib/bulma/css/bulma.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/lib/w3css/v4/w3.css">
+    <link rel="stylesheet" type="text/css" href="../css/admin.css">
+    <link rel="stylesheet" type="text/css" href="../css/lib/bulma-modal-fx-1.1.0/dist/css/modal-fx.min.css"> 
+    <link rel="stylesheet" type="text/css" href="../css/lib/bulma-divider/dist/css/bulma-divider.min.css"> 
+
+</head>
+<body>
+    
+    <div id="manageParticulars" v-cloak>
+
+        <header-nav
+            ref="headerNav"
+            :page-counter= "pageCounter"
+            :user-type = "userData.userType"
+            @copy-user-data = "copyUserData"
+        ></header-nav>
+
+        <div class="">
+            <div class="columns bp">
+                
+                <side-nav
+                    :page-counter = "pageCounter"
+                    :user-data = "userData"
+                >
+                </side-nav>
+
+                <!-- MAIN -->
+                <div class="column main">
+                    <br>
+                    <div class="w3-row w3-container">
+                        <br>
+
+                        <div class="box">
+                            <br>
+                            <button class="button is-link is-outlined" @click="showForm(0)">Add Particulars</button>
+
+                            <br>
+                            <br>
+
+                            <div class="w3-row">
+                                <table class="table is-fullwidth is-hoverable is-striped w3-border w3-round ">
+                                    <thead>
+                                        <tr class="has-background-link">
+                                            <th colspan="5" class=" has-text-white ">Particulars &nbsp<i class="fas fa-tooth"></i></th>
+                                        </tr>
+                                        <tr class="has-background-dark">
+                                            <th class=" has-text-white ">#</th>
+                                            <th class=" has-text-white ">Description</th>
+                                            <th class=" has-text-white ">Price</th>
+                                            <th class=" has-text-white w3-border-left w3-center"></th>
+                                            <th class=" has-text-white w3-border-left w3-center"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="p,index in particulars">
+                                            <td>{{index+1}}</td>
+                                            <td>{{p.description}}</td>
+                                            <td>₱&nbsp{{convertMoney(p.price)}}</td>
+                                            <td class="w3-center has-text-link w3-border-left pointer" @click="openUpdateParticularDetailsForm(index)"><i class="fas fa-edit"></i></td>
+                                            <td class="w3-center has-text-danger w3-border-left pointer" @click="archiveParticulars(p.particular_id)"><i class="fas fa-trash-alt"></i></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" :class="{'is-active' : isShowForm}">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+            <section class="modal-card-body">
+                <p class="is-size-5"><b>Add Particular</b></p>
+                <hr>
+                <div class="w3-row w3-container">
+                    <div class="w3-row">
+                        <label><b>Description</b></label>
+                        <div class="control">
+                            <input class="input upperCase" type="text" v-model="form.description.value" :class="{'is-danger' : form.description.error != ''}" maxlength="80"
+                                @change="changeDescription"
+                            >
+                        </div>
+                        <p class="help is-danger">{{form.description.error}}</p>
+                    </div>
+                    <br>
+                    <div class="w3-row">
+                        <label><b>Unit Price</b></label>
+                        <div class="control has-icons-left">
+                            <input class="input" type="number" v-model="form.price.value" :class="{'is-danger' : form.price.error != ''}" maxlength="15"
+                                @change="changePrice"
+                            >
+                            <span class="icon is-small is-left">
+                                ₱
+                            </span>
+                        </div>
+                        <p class="help is-danger">{{form.price.error}}</p>
+                    </div>
+                    <br>
+                    
+                </div>
+            </section>
+            <footer class="modal-card-foot">
+                <button class="button is-success" @click="saveParticulars" v-show="!forUpdating"><i class="fas fa-save"></i> &nbsp Save</button>
+                <button class="button is-success" @click="updateParticulars" v-show="forUpdating"> <i class="fas fa-edit"></i> &nbsp Update Details</button>
+                <button class="button" @click="closeForm">Cancel</button>
+            </footer>
+            </div>
+        </div>
+
+        <div class="modal" :class="{'is-active': mMessage != ''}">
+            <div class="modal-background" @click="closeModalMessage"></div>
+            <div class="modal-content box">
+                <div :class="mMessageType">{{mMessage}}</div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!-- script frame -->
+    <script src="../js/lib/vue/dist/vue.js"></script>
+    <script src="../js/lib/axios/dist/axios.min.js"></script>
+    <script src="../js/components/layouts/header.js"></script>
+    <script src="../js/components/layouts/modalMessage.js"></script>
+    <script src="../js/components/layouts/sideNav.js"></script>
+    <script src="../js/scripts/commonLib.js"></script>
+    <script src="../js/instances/manageParticulars.js"></script>
+
+</body>
+
+</html>

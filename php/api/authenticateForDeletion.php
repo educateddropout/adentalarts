@@ -1,6 +1,6 @@
 <?php
 
-$database = require '..\bootstrap.php';
+$database = require '..\bootstrapLogin.php';
 session_start();
 
 // setting return value
@@ -28,6 +28,7 @@ if($results){
 
 		
 		$returnJson['status'] = "SUCCESS";
+		$returnJson['message'] = "Successful";
 
 	}
 	else{

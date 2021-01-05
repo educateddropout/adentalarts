@@ -18,7 +18,9 @@ Vue.component('headerNav', {
 
 				<div id="navAdInventory" class="navbar-menu">
 					<div class="navbar-start">
-					  
+						<a class="navbar-item font-label">
+					        Dental Arts
+					    </a>
 					</div>
 
 					<div class="navbar-end">

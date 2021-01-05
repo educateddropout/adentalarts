@@ -1,12 +1,9 @@
 
-* {
-  font-family: 'Nunito Sans', sans-serif;
-}
 
 :root {
-  --shadowDark: #D9DDE6;
-  --background: #E4E9F2;
-  --shadowLight: #EFF5FE;
+  --shadowDark: #BFCBEC;
+  --background: #D4DCF2;
+  --shadowLight: #EAEEF9;
 }
 
 body {
@@ -21,6 +18,10 @@ body {
   border-radius: 25px;
   padding: 1.5rem;
   box-shadow: 8px 8px 15px var(--shadowDark), -8px -8px 15px var(--shadowLight);
+}
+
+.font-new{
+  font-family: Garamond, serif;
 }
 
 input {

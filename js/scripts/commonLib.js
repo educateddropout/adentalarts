@@ -1,175 +1,101 @@
-function libUnits(){
+function validateEmail(input){
 
-    return [
-                { 'description' : 'PCS', 'value' : '1' },
-                { 'description' : 'PACK', 'value' : '2' }, 
-                { 'description' : 'BOX', 'value' : '3' }
-            ];
+	let retVal = "";
 
-
-}
-
-function expiredStatusLib(){
-
-    return [
-                { 'description' : 'EXPIRED', 'value' : 1 },
-                { 'description' : 'NOT YET CONSUMED', 'value' : 2 }, 
-                { 'description' : 'CONSUMED', 'value' : 3 }
-            ];
-
-
-}
-
-function productTypeLib(){
-
-    return [
-                { 'description' : 'DENTAL SUPPLIES', 'value' : 1 },
-                { 'description' : 'EQUIPMENTS', 'value' : 2 }, 
-                { 'description' : 'CLEANING SUPPLIES', 'value' : 3 },
-                { 'description' : 'OFFICE SUPPLIES', 'value' : 4 },
-                { 'description' : 'OTHERS', 'value' : 5 },
-            ];
-
-
-}
-
-function stockLib(){
-
-    return [
-
-                { 'description' : 'OUT OF STOCK', 'value' : 1 },
-                { 'description' : 'LOW SUPPLIES', 'value' : 2 }, 
-                { 'description' : 'HIGH SUPPLIES', 'value' : 3 }
-
-            ];
-
-
-}
-
-function branchLib(){
-
-    return [
-
-                { 'description' : 'KAMUNING', 'value' : 'K' },
-                { 'description' : 'MAKATI', 'value' : 'M' }, 
-                { 'description' : 'DENTAL ARTS', 'value' : 'D' }
-
-            ];
-
-}
-
-function segregateStocks(quantity){
-
-    let retVal = 3;
-
-    if(Number(quantity) == 0) retVal = 1;
-    else if(Number(quantity) < 11) retVal = 2;
+	if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(input))){
+		retVal = "You have entered an invalid Email Address!";
+	} else {
+		if(input.trim() == ""){
+			retVal = "This is required!";
+		}
+	}
 
     return retVal;
 
-
 }
 
-function segregateExpiration(expirationDate, isConsumed){
+function validateInput(input){
 
-    let retVal = 3;
+	let retVal = "";
 
-    var today = new Date();
-    var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-    var yyyy = today.getFullYear();
+	if(input.trim() != ""){
 
-    var eyyyy = expirationDate.substring(0,4);
-    var emm = expirationDate.substring(5,7);
-    var edd = expirationDate.substring(8,10);
+		if (! /^[a-zA-ZÃ‘Ã±0-9'Ãƒ./\-\s]+$/.test(input)) {
+		    // Validation failed
+		    retVal = "Found invalid character! Please Check..";
+		}
 
-    if( isConsumed != 'Y' && (Number(eyyyy + emm + edd + "") < Number(yyyy + mm + dd + ""))) retVal = 1;
-    else if(isConsumed != 'Y') retVal = 2;
+	} else {
 
-    return retVal;
+		retVal = "This is required!";
 
+	}
 
+	return retVal;
 }
 
-
-function validateIndex(value){
+function validatePercentage(input){
 
     let retVal = "";
-
-    if(value == -1){
-        retVal = "Please select product";
-    }
-
-    return retVal;
-
-}
-
-function validateQuantity(value){
-
-    let retVal = "";
-
-    if(value < 1){
-        retVal = "Quantity should be more than 0";
-    }
-
-    return retVal;
-
-}
-
-function validatePrice(value){
-
-    let retVal = "";
-
-    if(value < 1){
-        retVal = "Price should be more than 0";
-    }
-
-    return retVal;
-
-}
-
-function validateQuantity(value, stock){
-
-    let retVal = "";
-
-    if(value < 1){
-        retVal = "Quantity should be more than 0";
-    }
-
-    return retVal;
-
-}
-
-function validateExpirationDate(date){
-
-    let retVal = "";
-    let today = new moment(moment().toISOString(true).substring(0,10));
-    let formattedDateToday = today.toISOString(true).substring(0,10);
     
-    if(date != ""){
-        if(date <= formattedDateToday ) retVal = "Thou shall not get expired product.";
-    }
+    if(input.trim() != ""){
 
-    return retVal;
+        if(input > 100 || input < 0){
+            retVal = "Percentage should be 0 to 100 only";
+        }
 
-}
+        if (! /^[0-9]+$/.test(input)) {
+            // Validation failed
+            retVal = "Found invalid value! Please Check..";
+        }
 
-function validateQuantityOutgoing(value, stock, isSaving){
-
-    let retVal = "";
-
-    if(stock == 0 ){
-        retVal = "No stocks available.";
     } else {
 
-        if(value < 1 && isSaving){
-            retVal = "Quantity should be more than 0";
-        }
+        retVal = "This is required!";
 
-        if(Number(value) > Number(stock)){
-            retVal = `Only ${stock} stock/s left`;
-        }
+    }
 
+    return retVal;
+}
+
+function validateSelect(input){
+
+    let retVal = "";
+
+    if(input == -1){
+        retVal = "This is required!";
+    }
+
+    return retVal;
+}
+
+function validateContactNumber(input){
+
+    let retVal = "";
+    inputLength = input.length;
+
+    if(! /^[0-9]+$/.test(input)){
+        retVal = "Invalid Contact Number.";
+    } else{
+
+        if(inputLength == 11 && input.substring(0,2) != '09'){
+            retVal = "Cellphone number should start in '09'.";
+        }else if(inputLength < 7){
+            retVal = "Contact number length should be 8, 9, 10, 11. Including area code.";
+        }
+    }
+
+    return retVal;
+
+}
+
+function validatePrice(input){
+
+    let retVal = "";
+    inputLength = input.length;
+
+    if(! /^[0-9.]+$/.test(input)){
+        retVal = "Invalid Price.";
     }
 
     return retVal;
@@ -189,6 +115,50 @@ function getLastDayOfTheMonth(month, year){
     return retVal;
 }
 
+function validateDateFrom(selectedDateFrom){
+
+    let ans = "";
+    let today = new moment(moment().toISOString(true).substring(0,10));
+    let formattedDateToday = today.toISOString(true).substring(0,10);
+
+    if(selectedDateFrom == ""){
+        ans = "Please provide date";
+    }
+    else {
+        if(selectedDateFrom > formattedDateToday){
+            ans = "Cannot log future dates";
+        }
+    }
+
+    return ans;
+
+}
+
+function validateDateTo(selectedDateFrom,selectedDateTo){
+
+    let ans = "";
+    let today = new moment(moment().toISOString(true).substring(0,10));
+    let formattedDateToday = today.toISOString(true).substring(0,10);
+
+    if(selectedDateTo == ""){
+        ans = "Please provide date";
+    }
+    else {
+        if(selectedDateTo > formattedDateToday){
+            ans = "Cannot log future dates";
+        }
+
+        if(selectedDateFrom != ""){
+            if(selectedDateTo < selectedDateFrom){
+                ans = "DATE TO must not be greater than DATE FROM";
+            }
+        }
+    }
+
+    return ans;
+
+}
+
 function validateLoginInput(input){
     let retVal = "";
 
@@ -197,53 +167,14 @@ function validateLoginInput(input){
     return retVal;
 }
 
-function validateSelection(value){
+function statusLib(){
 
-    let retVal = "";
+    return [
 
-    if(value == -1){
-        retVal = "This is required!";
-    }
+                { 'description' : 'CLOSED', 'value' : 'C' },
+                { 'description' : 'OPEN', 'value' : 'O' },
 
-    return retVal;
+            ];
 
-}
-
-function validateName(value, requiredCtr){
-
-    let retVal = "";
-
-    if(value.trim().length < 1 && requiredCtr) retVal = "This is required!";
-    else{
-
-        if (! /^[a-zA-ZÃƒâ€˜ÃƒÂ±0-9'ÃƒÆ’.\-\s]+$/.test(value)) {
-            // Validation failed
-            msg = "Found invalid character! Please Check..";
-
-        }
-    }
-
-    return retVal;
-
-}
-
-function validateContactNumber(input){
-
-    let retVal = "";
-    inputLength = input.length;
-
-    if(! /^[0-9]+$/.test(input)){
-        retVal = "Invalid Contact Number.";
-    } else{
-
-        if(inputLength == 11 && input.substring(0,2) != '09'){
-            retVal = "Cellphone number should start in '09'.";
-        }else if(inputLength < 7){
-            retVal = "Contact number length should be 8, 9, 10, 11. Including area code.";
-        }
-        
-    }
-
-    return retVal;
 
 }

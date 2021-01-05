@@ -10,16 +10,16 @@ var sc = new Vue({
 		pageCounter : 1,
 		userData : {},
 
-		lowStockProducts : [],
-		transactions : []
+		products : [],
+		jobOrders : []
 
 		
 	},
 
 	mounted(){
 
-		this.fetchLowStockProducts();
-		this.fetchTransactions();
+		this.fetchOngoingJobOrders();
+		this.fetchMostSoldProducts();
 
 	},
 
@@ -32,34 +32,39 @@ var sc = new Vue({
 
 		},
 
-		fetchLowStockProducts(){
+		fetchOngoingJobOrders(){
 
 			let self = this;
-			axios.post('../php/api/fetchLowStockProducts.php',{
+
+			axios.post('../php/api/fetchOngoingJobOrders.php',{
+            	
+                
             })
             .then(function (response){
 
                 console.log(response.data);
+
                 if(response.data.status == "SUCCESS"){
-                    self.lowStockProducts = response.data.message;                    
+
+                    self.jobOrders = response.data.message;
                 }
+
             })
             .catch(function (error) {
                 console.log(error);
             });
-
 		},
 
-		fetchTransactions(){
+		fetchMostSoldProducts(){
 
 			let self = this;
-			axios.post('../php/api/fetchTransactions.php',{
+			axios.post('../php/api/fetchMostSoldProducts.php',{
             })
             .then(function (response){
 
                 console.log(response.data);
                 if(response.data.status == "SUCCESS"){
-                    self.transactions = response.data.message;                    
+                    self.products = response.data.message;                    
                 }
             })
             .catch(function (error) {

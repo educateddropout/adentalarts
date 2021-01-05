@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ampong Dental Arts - Manage Clients</title>
+
+    <link rel="stylesheet" href="../css/lib/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/lib/bulma/css/bulma.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/lib/w3css/v4/w3.css">
+    <link rel="stylesheet" type="text/css" href="../css/admin.css">
+    <link rel="stylesheet" type="text/css" href="../css/lib/bulma-modal-fx-1.1.0/dist/css/modal-fx.min.css"> 
+    <link rel="stylesheet" type="text/css" href="../css/lib/bulma-divider/dist/css/bulma-divider.min.css"> 
+
+</head>
+<body>
+    
+    <div id="manageClients" v-cloak>
+
+        <header-nav
+            ref="headerNav"
+            :page-counter= "pageCounter"
+            :user-type = "userData.userType"
+            @copy-user-data = "copyUserData"
+        ></header-nav>
+
+        <div class="">
+            <div class="columns bp">
+                
+                <side-nav
+                    :page-counter = "pageCounter"
+                    :user-data = "userData"
+                >
+                </side-nav>
+
+                <!-- MAIN -->
+                <div class="column main">
+                    <br>
+                    <div class="w3-row w3-container">
+                        <br>
+
+                        <div class="box">
+                            <br>
+                            <button class="button is-link is-outlined" @click="showForm(0)">Add Client</button>
+
+                            <br>
+                            <br>
+
+                            <div class="w3-row">
+                                <table class="table is-fullwidth is-hoverable is-striped w3-border w3-round ">
+                                    <thead>
+                                        <tr class="has-background-link">
+                                            <th colspan="7" class=" has-text-white ">Clients &nbsp<i class="fas fa-user-md"></i></th>
+                                        </tr>
+                                        <tr class="has-background-dark">
+                                            <th class=" has-text-white ">#</th>
+                                            <th class=" has-text-white ">Client Name</th>
+                                            <th class=" has-text-white ">Address</th>
+                                            <th class=" has-text-white ">Contact Number</th>
+                                            <th class=" has-text-white ">Email Address</th>
+                                            <th class=" has-text-white w3-border-left w3-center"></th>
+                                            <th class=" has-text-white w3-border-left w3-center"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="c,index in clients">
+                                            <td>{{index+1}}</td>
+                                            <td>{{c.client_name}}</td>
+                                            <td>{{c.address}}</td>
+                                            <td>{{c.contact_number}}</td>
+                                            <td>{{c.email_address}}</td>
+                                            <td class="w3-center has-text-link w3-border-left pointer" @click="openUpdateClientDetailsForm(index)"><i class="fas fa-edit"></i></td>
+                                            <td class="w3-center has-text-danger w3-border-left pointer" @click="archiveClient(c.client_id)"><i class="fas fa-trash-alt"></i></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" :class="{'is-active' : isShowForm}">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+            <section class="modal-card-body">
+                <p class="is-size-5"><b>Add Client</b></p>
+                <hr>
+                <div class="w3-row w3-container">
+                    <div class="w3-row">
+                        <label><b>Client Name</b></label>
+                        <div class="control">
+                            <input class="input upperCase" type="text" v-model="form.name.value" :class="{'is-danger' : form.name.error != ''}" maxlength="80"
+                                @change="changeName"
+                            >
+                        </div>
+                        <p class="help is-danger">{{form.name.error}}</p>
+                    </div>
+                    <br>
+                    <div class="w3-row">
+                        <label><b>Address</b></label>
+                        <textarea class="textarea upperCase" :class="{'is-danger' : form.address.error != ''}" maxlength="100" 
+                            v-model = "form.address.value" cols="2"  @change="changeAddress"
+                        ></textarea>
+                        <p class="help is-danger">{{form.address.error}}</p>
+                    </div>
+                    <br>
+                    <div class="w3-row">
+
+                        <label><b>Contact Number</b></label>
+                        <div class="control">
+                            <input class="input upperCase" type="text" v-model="form.contactNumber.value" :class="{'is-danger' : form.contactNumber.error != ''}" maxlength="11"
+                                @change="changeContactNumber"
+                            >
+                        </div>
+                        <p class="help is-danger">{{form.contactNumber.error}}</p>
+
+                    </div>
+                    <br>
+                    <div class="w3-row">
+                        <label><b>Email Address</b></label>
+                        <div class="control">
+                            <input class="input" type="text" v-model="form.emailAddress.value" :class="{'is-danger' : form.emailAddress.error != ''}" maxlength="60"
+                                @change="changeEmailAddress"
+                            >
+                        </div>
+                        <p class="help is-danger">{{form.emailAddress.error}}</p>
+                    </div>
+                    <br>
+                    
+                </div>
+            </section>
+            <footer class="modal-card-foot">
+                <button class="button is-success" @click="saveClientDetails" v-show="!forUpdating"><i class="fas fa-save"></i> &nbsp Save</button>
+                <button class="button is-success" @click="updateClientDetails" v-show="forUpdating"> <i class="fas fa-edit"></i> &nbsp Update Details</button>
+                <button class="button" @click="closeForm">Cancel</button>
+            </footer>
+            </div>
+        </div>
+
+        <div class="modal" :class="{'is-active': mMessage != ''}">
+            <div class="modal-background" @click="closeModalMessage"></div>
+            <div class="modal-content box">
+                <div :class="mMessageType">{{mMessage}}</div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!-- script frame -->
+    <script src="../js/lib/vue/dist/vue.js"></script>
+    <script src="../js/lib/axios/dist/axios.min.js"></script>
+    <script src="../js/components/layouts/header.js"></script>
+    <script src="../js/components/layouts/modalMessage.js"></script>
+    <script src="../js/components/layouts/sideNav.js"></script>
+    <script src="../js/scripts/commonLib.js"></script>
+    <script src="../js/instances/manageClients.js"></script>
+
+</body>
+
+</html>

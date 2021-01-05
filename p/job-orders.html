@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ampong Dental Arts - Job Orders</title>
+
+    <link rel="stylesheet" href="../css/lib/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/lib/bulma/css/bulma.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/lib/w3css/v4/w3.css">
+    <link rel="stylesheet" type="text/css" href="../css/admin.css">
+    <link rel="stylesheet" type="text/css" href="../css/lib/bulma-modal-fx-1.1.0/dist/css/modal-fx.min.css"> 
+    <link rel="stylesheet" type="text/css" href="../css/lib/bulma-divider/dist/css/bulma-divider.min.css"> 
+
+</head>
+<body>
+    
+    <div id="jobOrders" v-cloak>
+
+        <header-nav
+            ref="headerNav"
+            :page-counter= "pageCounter"
+            :user-type = "userData.userType"
+            @copy-user-data = "copyUserData"
+        ></header-nav>
+
+        <div class="">
+            <div class="columns bp">
+                
+                <side-nav
+                    :page-counter = "pageCounter"
+                    :user-data = "userData"
+                >
+                </side-nav>
+
+                <!-- MAIN -->
+                <div class="column main">
+                    <br>
+                    <div class="w3-row w3-container">
+                        <br>
+
+                        <div class="box">
+
+                            <dates-selection
+                                @config-date-label="configDateLabel"
+                                @fetch-records = "fetchJobOrders"
+                            >
+                            </dates-selection>
+
+                            <button class="button is-link" @click="showForm(0)">Add Job Order</button>
+                            <br>
+                            <br>
+                            <filter-job-order
+                                :technician-types = "technicianTypes"
+                                :status-types = "statusTypes"
+                                :technician-lib = "technicians"
+                            >
+                            </filter-job-order>
+                            <br>
+                            <div class="w3-row w3-margin-bottom">
+                                <div class="w3-col l3">
+                                    <div class="field has-addons">
+                                        <p class="control">
+                                            <input class="input w3-border w3-border-black" v-model="searchInput" type="text" placeholder="Search" >
+                                        </p>
+                                        <p class="control">
+                                            <a class="button is-dark is-outlined" >
+                                                <i class="fas fa-search"></i>
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <job-order-table
+                                :data = "filteredJobOrders"
+                                :date-from = "dateFrom"
+                                :date-to = "dateTo"
+                                :date-label = "dateLabel"
+                                :user-data = "userData"
+
+                                @view-job-order="viewJobOrder"
+                                @fetch-job-orders="fetchJobOrders"
+
+                            >
+                            </job-order-table>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-fadeInScale-fs" class="modal modal-full-screen modal-fx-fadeInScale " :class="{'is-active' : isShowForm}">
+            <div class="modal-background"></div>
+            <div class="modal-content modal-card">
+
+                <header class="modal-card-head">
+                    <p class="modal-card-title"><b>Add Job Order</b></p>
+                    <button class="modal-button-close delete" @click="closeForm" aria-label="close"></button>
+                </header>
+                <section class="modal-card-body">
+                <!-- Modal card body -->
+                    <div class="w3-row">
+                        <div class="w3-col l1">&nbsp</div>
+                        <div class="w3-col l10" >
+                            <div class="w3-row-padding">
+
+                                <div class="w3-quarter">
+                                    <div class="field">
+                                        <div class="control">
+                                            <div class="select  is-fullwidth">
+                                                <select v-model="form.client.value" :class="{'is-danger' : form.client.error != ''}" @change="changeClient" :disabled="forUpdating">
+                                                    <option value="-1" disabled>Please select</option>
+                                                    <option v-for="d in clients" :value="d.client_id">{{d.client_name}}</option>
+                                                </select>
+                                            </div>
+                                            <p class="help"><b>Client</b></p>  
+                                            <p class="help is-danger"><b>{{form.client.error}}</b></p>  
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="w3-quarter">
+                                    <div class="field">
+                                        <div class="control">
+                                            <input class="input upperCase" type="text" v-model="form.patientName.value" :class="{'is-danger' : form.patientName.error != ''}" maxlength="80"
+                                                @change="changePatientName" :disabled="forUpdating"
+                                            >
+
+                                            <p class="help"><b>Patient Name</b></p>  
+                                            <p class="help is-danger"><b>{{form.patientName.error}}</b></p>  
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="w3-quarter">
+
+                                    <div class="field">
+                                        <div class="control" >
+                                            <div class="select  is-fullwidth" >
+                                                <select v-model="form.technician.value" :class="{'is-danger' : form.technician.error != ''}" @change="changeTechnician" :disabled="forUpdating">
+                                                    <option value="-1" disabled>Please select</option>
+                                                    <option v-for="d in technicians" :value="d.technician_id">{{d.technician_name}}</option>
+                                                </select>
+                                            </div>
+                                            <p class="help"><b>Technician</b></p>  
+                                            <p class="help is-danger"><b>{{form.technician.error}}</b></p>  
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="w3-quarter">
+                                    <div class="field">
+                                        <div class="control has-icons-right">
+                                            <input class="input upperCase" type="number" v-model="form.tPercentage.value" :class="{'is-danger' : form.tPercentage.error != ''}" maxlength="3"
+                                                @change="changeTPercentage" :disabled="forUpdating"
+                                            >
+                                            <span class="icon is-right">
+                                                %
+                                            </span>
+
+                                            <p class="help"><b>Technician Percentage</b></p>  
+                                            <p class="help is-danger"><b>{{form.tPercentage.error}}</b></p>  
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+
+                            <div class="w3-row" v-if="showParticulars">
+
+                                <div v-if="!forUpdating">
+                                    <div class="is-divider" data-content=""></div>
+
+                                    <div class="w3-row-padding">
+
+                                        <div class="w3-quarter">
+                                            <div class="field">
+                                                <div class="control">
+                                                    <div class="select  is-fullwidth">
+                                                        <select v-model="form2.particular.value" :class="{'is-danger' : form2.particular.error != ''}" @change="changeParticular">
+                                                            <option value="-1" disabled>Please select</option>
+                                                            <option v-for="d,index in particulars" :value="index">{{d.description}}</option>
+                                                        </select>
+                                                    </div>
+                                                    <p class="help"><b>Particulars</b></p>  
+                                                    <p class="help is-danger"><b>{{form2.particular.error}}</b></p>  
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="w3-quarter">
+                                            <div class="field">
+                                                <div class="field">
+                                                    <div class="control">
+                                                        <input class="input" :class="" maxlength="10" type="number" 
+                                                            v-model="form2.quantity.value" @change="changeQuantity"
+                                                        >
+                                                    </div>
+                                                </div>
+                                                <p class="help"><b>Quantity</b></p>  
+                                                <p class="help is-danger"><b>{{form2.quantity.error}}</b></p>  
+                                            </div>
+                                        </div>
+
+                                        <div class="w3-quarter">
+
+                                            <div class="field">
+                                                <div class="field">
+                                                    <div class="control has-icons-left has-icons-right">
+                                                        <input class="input" :class="" maxlength="10" type="number" 
+                                                            v-model="form2.currentPrice.value" disabled 
+                                                        >
+                                                        <span class="icon is-left">
+                                                            ₱
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <p class="help"><b>Price</b></p>  
+                                                <p class="help is-danger"><b>{{form2.currentPrice.error}}</b></p>  
+                                            </div>
+                                        </div>
+
+                                        <div class="w3-quarter">
+                                            <button class="button is-link w3-right" @click="addParticular">&nbsp <i class="fas fa-plus-square"></i>&nbsp Add &nbsp </button>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="w3-row" v-if="form.particulars.length > 0">
+                                    <div class="is-divider" data-content="PARTICULARS"></div>
+                                    <table class="table is-fullwidth is-hoverable is-striped w3-border w3-round ">
+                                        <thead>
+                                            <tr class="has-background-dark">
+                                                <th class=" has-text-white ">#</th>
+                                                <th class=" has-text-white ">Description</th>
+                                                <th class=" has-text-white ">Quantity</th>
+                                                <th class=" has-text-white ">Price</th>
+                                                <th class=" has-text-white ">Total Amount</th>
+                                                <th class=" has-text-white w3-border-left"></th>
+                                            </tr>
+                                            <tr class="has-background-grey">
+                                                <th colspan="4"></th>
+                                                <th colspan="2">₱ {{convertMoney(totalPrice)}}</th>
+                                            </tr>
+
+                                        </thead>
+                                        <tfoot>
+                                            <tr class="has-background-grey">
+                                                <th colspan="4"></th>
+                                                <th colspan="2">₱ {{convertMoney(totalPrice)}}</th>
+                                            </tr>
+                                        </tfoot>
+                                        <tbody >
+                                            <tr v-for="d,index in form.particulars">
+                                                <td>{{index+1}}</td>
+                                                <td>{{d.description}}</td>
+                                                <td>{{d.quantity}}</td>
+                                                <td>₱ {{convertMoney(d.price)}}</td>
+                                                <td>₱ {{convertMoney(d.price*d.quantity)}}</td>
+                                                <td class="w3-border-left w3-center pointer"><span class="has-text-danger" @click="removeParticular(index)"><i class="fas fa-trash-alt"></i></span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div v-if="forUpdating">
+                                    <div class="is-divider" data-content="Job Order History"></div>
+                                    <button class="button is-success" @click="openChangeStatusModal" :disabled="selectedJobOrderStatus == 'C'"><i class="fas fa-archive"></i> &nbsp Tag as Done</button>
+                                    <button class="button w3-right is-outlined is-link" @click="openAddHistory" :disabled="selectedJobOrderStatus == 'C'" > 
+                                        <i class="fas fa-plus"></i> &nbsp Add Job Order History 
+                                    </button>
+                                    <br>
+                                    <br>
+                                    <table class="table is-fullwidth is-hoverable is-striped w3-border w3-round ">
+                                        <thead>
+                                            <tr class="has-background-dark">
+                                                <th class=" has-text-white ">#</th>
+                                                <th class=" has-text-white ">Date</th>
+                                                <th class=" has-text-white ">Transaction Type</th>
+                                                <th class=" has-text-white ">Remarks</th>
+                                                <th class=" has-text-white w3-border-left"></th>
+                                            </tr>
+
+                                        </thead>
+                                        <tbody >
+                                            <tr v-for="d,index in jobOrderHistory">
+                                                <td>{{index+1}}</td>
+                                                <td>{{d.date_added}}</td>
+                                                <td><b>{{d.transaction_type}}</b></td>
+                                                <td>{{d.remarks}}</td>
+                                                <td class="w3-border-left w3-center" :class="{'pointer': selectedJobOrderStatus != 'C', 'not-allowed': selectedJobOrderStatus == 'C'}">
+                                                    <span :class="{'has-text-danger': selectedJobOrderStatus != 'C'}" @click="archiveJobOrderHistory(d.id)" v-if="index > 0">
+                                                    <i class="fas fa-trash-alt"></i></span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    
+
+                            </div>
+                            
+                        </div>
+                        <div class="w3-col l1">&nbsp</div>
+                    </div>
+                </section>
+                <footer class="modal-card-foot">
+                    <button class="modal-button-close button is-link" @click="openConfirmation" v-if="!forUpdating" :disabled="form.particulars.length < 1"><i class="fas fa-cart-arrow-down"></i> &nbsp Save</button>
+                    
+                    <button class="modal-button-close button is-outlined is-danger" @click="closeForm">Cancel</button>
+                </footer>
+            </div>
+        </div>
+
+        <div class="modal" :class="{'is-active' : isOpenConfirmation}">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+            
+            <section class="modal-card-body">
+                <b>** No updating of details after saving. Please make sure that all details are correct.</b>
+                <hr>
+
+                Are you sure you want to continue?
+            </section>
+            <footer class="modal-card-foot">
+                <button class="button is-success" @click="saveJobOrder">Proceed</button>
+                <button class="button" @click="closeConfirmation">Cancel</button>
+            </footer>
+            </div>
+        </div>
+
+        <!-- change status modal -->
+        <div class="modal" :class="{'is-active' : isOpenChangeStatusModal}">
+            <div class="modal-background" @click="closeChangeStatusModal"></div>
+            <div class="modal-card">
+                <section class="modal-card-body">
+                    <div class="w3-row  has-text-danger" v-if="changeStatusError">
+                        Unable to tag <b>Job Order</b> as done. Last transaction type should be <b>RELEASED</b>.
+                    </div>
+                    <div class="w3-row" v-else>
+                        <b>** You cannot add Job Order History once closed.</b>
+
+                        <br>
+                        <br>
+                        Are you sure you want to proceed?
+                    </div>
+                </section>
+                <footer class="modal-card-foot" v-if="!changeStatusError">
+                    <button class="button is-success" @click="updateJobOrderStatus">Proceed</button>
+                    <button class="button" @click="closeChangeStatusModal">Cancel</button>
+                </footer>
+
+            </div>
+            
+        </div>
+
+        <!-- saving modal -->
+        <div class="modal" :class="{'is-active' : isOpenMessage}">
+            <div class="modal-background" @click="closeMessage"></div>
+            <div class="modal-card">
+            
+                <section class="modal-card-body">
+                    <span class="" v-show="messageCtr == 0">Saving Job Order. Please wait! . . . &nbsp<i class="fas fa-spinner fa-pulse"></i></span>
+                    <span class="has-text-success" v-show="messageCtr == 1">Successfully saved. &nbsp<i class="fas fa-glass-cheers"></i></span>
+                    <span class="has-text-danger" v-show="messageCtr == -1">Error saving. Please contact your system administrator.</span>
+                </section>
+
+            </div>
+        </div>
+
+        <div class="modal" :class="{'is-active' : isOpenAddHistory}">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+            
+            <section class="modal-card-body">
+                <br>
+                <label><b>Transaction Type</b></label>
+                <div class="field">
+                    <div class="control">
+                        <div class="select  is-fullwidth">
+                            <select v-model="form3.transactionType.value" :class="{'is-danger' : form3.transactionType.error != ''}" @change="changeClient">
+                                <option value="" disabled>Please select</option>
+                                <option value="RECEIVED">RECEIVED</option>
+                                <option value="RELEASED">RELEASED</option>
+                            </select>
+                        </div>
+                        <p class="help is-danger"><b>{{form3.transactionType.error}}</b></p>  
+                    </div>
+                </div>
+                <br>
+                <label><b>Remarks</b></label>
+                <div class="field">
+                    <div class="control">
+                        <textarea class="textarea upperCase" type="text" v-model="form3.remarks.value" :class="{'is-danger' : form3.remarks.error != ''}" maxlength="200"
+                            @change="changePatientName" rows=
+                        ></textarea>
+                        <p class="help is-danger"><b>{{form3.remarks.error}}</b></p>  
+                    </div>
+                </div>
+            </section>
+            <footer class="modal-card-foot">
+                <button class="button is-success" @click="saveJobOrderHistory">Proceed</button>
+                <button class="button" @click="closeAddHistory">Cancel</button>
+            </footer>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- script frame -->
+    <script src="../js/lib/vue/dist/vue.js"></script>
+    <script src="../js/lib/axios/dist/axios.min.js"></script>
+    <script src="../js/lib/moment/min/moment.min.js"></script>
+    <script src="../js/components/layouts/header.js"></script>
+    <script src="../js/components/layouts/modalMessage.js"></script>
+    <script src="../js/components/layouts/sideNav.js"></script>
+    <script src="../js/components/dateSelection.js"></script>
+    <script src="../js/components/jobOrders/jobOrderTable.js"></script>
+    <script src="../js/components/jobOrders/filterJobOrder.js"></script>
+    <script src="../js/scripts/commonLib.js"></script>
+    <script src="../js/instances/jobOrders.js"></script>
+
+</body>
+
+</html>
